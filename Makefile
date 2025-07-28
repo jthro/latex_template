@@ -20,7 +20,7 @@ DIAGRAM_PNGS := $(patsubst $(DIAGRAM_SRC_PATH)/%.tex, $(DIAGRAM_PATH)/%.png, $(D
 
 ################################################################################
 
-default: all
+default: makedir all
 
 diagrams: $(DIAGRAM_PNGS)
 all: $(OUTPUT_PATH)/$(TARGET).pdf
@@ -28,12 +28,11 @@ all: $(OUTPUT_PATH)/$(TARGET).pdf
 ################################################################################
 
 # Make directories if they don't exist
+.PHONY: makedir
 makedir:
-makedir:
-	@mkdir -p $(DIAGRAM_PATH) $(DIAGRAM_SRC_PATH) $(SRC_PATH) $(IMG_PATH) $(OUTPUT_PATH)
+	mkdir -p $(DIAGRAM_PATH) $(DIAGRAM_SRC_PATH) $(SRC_PATH) $(IMG_PATH) $(OUTPUT_PATH)
 
 # Compile diagrams to images
-$(DIAGRAM_PATH)/%.png: makedir
 $(DIAGRAM_PATH)/%.png: $(DIAGRAM_SRC_PATH)/%.tex
 	$(LC) --interaction=nonstopmode --output-directory=$(DIAGRAM_PATH) $<
 	$(PDF2PNG) -density 600 $(DIAGRAM_PATH)/$*.pdf -trim +repage -fuzz 50% -quality 100 $(DIAGRAM_PATH)/$*.png
